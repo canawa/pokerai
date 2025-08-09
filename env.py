@@ -25,7 +25,7 @@ class PokerEnv:
             reward = -0.5 # штраф за фолд (не надо это здесь суммировать, это локально)
             self.done = True # и игра закончена
             self.opp_hand = None
-            return reward, self.done, self.opp_hand # возвращаем награду и done
+            return reward, self.done,self.hand, self.opp_hand # возвращаем награду и done
 
         else: # если пуш
             self.opp_hand = random.randint(0,168) # выбираем случайную комбинацию из двух карт, делаем это тут чтобы заранее не знать комбинацию противника
@@ -35,7 +35,7 @@ class PokerEnv:
             else: # если наша комбинация хуже то мы проигрываем
                 reward = -1 # проигрыш
             self.done = True # и игра закончена
-            return reward, self.done, self.opp_hand # возвращаем награду и done
+            return reward, self.done, self.hand, self.opp_hand # возвращаем награду и done
 
 env = PokerEnv() # инициализируем объект класса
 # print('Комбинация:',env.get_hand(), env.step(0))
