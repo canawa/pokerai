@@ -2,7 +2,7 @@
 # Простая среда для хедз-ап покера 10BB — префлоп push/fold
 import random
 import torch
-
+from cards import Draw
 class PokerEnv:
     def __init__(self): # конструктор
         self.reward = 0 # задаем значение награды (оно будет доступно в любом методе этого класса)
