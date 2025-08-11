@@ -32,10 +32,10 @@ class PokerEnv:
         else: # если пуш
             self.opp_hand = random.randint(0,168) # выбираем случайную комбинацию из двух карт, делаем это тут чтобы заранее не знать комбинацию противника
             if self.hand > self.opp_hand: # если наша комбинация лучше то мы выигрываем
-                reward = 1 # выигрыш
+                reward = 10 # выигрыш
                 
             else: # если наша комбинация хуже то мы проигрываем
-                reward = -1 # проигрыш
+                reward = -10 # проигрыш
             self.done = True # и игра закончена
             return reward, self.done, self.hand, self.opp_hand # возвращаем награду и done
 
