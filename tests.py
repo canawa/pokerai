@@ -2,8 +2,16 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-a = torch.tensor([[2,1,0],
-                  [3,1,2]])
-a_softmax = F.softmax(a.float(), dim=1)
-print(a_softmax)
-print(a.shape)
+data = torch.load('wine-red.pt')
+X_train = torch.load('X_train.pt')
+y_train = torch.load('y_train.pt')
+X_val = torch.load('X_val.pt')
+y_val = torch.load('y_val.pt')
+
+print(X_train.shape, y_train.shape, X_val.shape, y_val.shape)
+
+
+
+
+
+ 
