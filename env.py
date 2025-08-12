@@ -32,12 +32,20 @@ class PokerEnv:
     def get_hand_one_hot(self): # вытаскиваем комбинацию
         return self.player_hand_one_hot # возвращаем комбинацию свою
 
+    def get_pretty_cards(self):
+        pretty_cards = self.cards.get_pretty_cards()
+        self.player_pretty_cards = pretty_cards[0]
+        self.villain_pretty_cards = pretty_cards[1]
+        self.board_pretty_cards = pretty_cards[2]
+        return self.player_pretty_cards, self.villain_pretty_cards, self.board_pretty_cards
 
     def step(self,action): # действие (пуш или фолд) пуш = 1 фолд = 0
+        
         if action == 0: # фолд
             self.reward = -0.5
             self.done = True
-            return self.reward, self.done, self.player_hand_one_hot, self.villain_hand_one_hot, self.player_hand, self.villain_hand
+            self.get_pretty_cards()
+            return self.reward, self.done, self.player_hand_one_hot, self.villain_hand_one_hot, self.player_pretty_cards, self.villain_pretty_cards, self.board_pretty_cards
         elif action == 1: # пуш (играем тут префлоп ток)
             self.flop = self.cards.draw_flop() # заранее раздаем, но не даем эту инфу модели
             self.turn = self.cards.draw_turn() # заранее раздаем, но не даем эту инфу модели
@@ -49,11 +57,15 @@ class PokerEnv:
 
             self.score = self.cards.get_score()
             if self.score[0] > self.score[1]:
-                self.reward = 10
+                self.reward = 9.5
             elif self.score[0] < self.score[1]:
                 self.reward = -10
             self.done = True
-            return self.reward, self.done, self.player_hand_one_hot, self.villain_hand_one_hot, self.player_hand, self.villain_hand
+            self.get_pretty_cards()
+            hands = [self.player_hand, self.villain_hand]
+            board = self.river
+            cards.evaluator.hand_summary(board, hands)
+            return self.reward, self.done, self.player_hand_one_hot, self.villain_hand_one_hot, self.player_pretty_cards, self.villain_pretty_cards, self.board_pretty_cards, hands, board
 
 env = PokerEnv()
 

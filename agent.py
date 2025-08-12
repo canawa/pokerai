@@ -38,7 +38,8 @@ if commands == 'train':
         round_results = env.step(multinominal_decision) # записываем результаты и инфу по раунду игры (env.py)
         reward = round_results[0]
         # POLICY GRADIENT LOSS #
-        loss = -torch.log(probabilities[multinominal_decision]) * reward # пока просто запомнить (!!!ПОТОМ ОБЯЗАТЕЛЬНО ПОНЯТЬ ПОЧЕМУ ТАК) выбирает решение мультиноминал пропорционально вероятности
+        loss = torch.log(probabilities[multinominal_decision]) * reward # пока просто запомнить (!!!ПОТОМ ОБЯЗАТЕЛЬНО ПОНЯТЬ ПОЧЕМУ ТАК) выбирает решение мультиноминал пропорционально вероятности
+        # loss = -loss
         optimizer.zero_grad() # сброс старых градиентов (чтобы не складывались)
         loss.backward() # автодиф  (найдет производные от каждого веса и запишет их в градиенты)
         optimizer.step() # обновление весов градиентным спуском
@@ -63,9 +64,9 @@ elif commands == 'validation':
         multinominal_decision = torch.multinomial(probabilities,1).item() # случайно выбирает действие пропорционально вероятности (для обучения), вернет либо 0 либо 1 (возвращает индексы)
         round_results = env.step(math_correct_decision)
         print('Выход:', output.detach().numpy(), 'Вероятность:', probabilities.detach().numpy(),'Решение:', math_correct_decision, '(PUSH)' if math_correct_decision==1 else '(FOLD)')
-        print('Награда:', round_results[0], '; Раунд окончен:', round_results[1],'; Your Hand:', round_results[2], '; Op`s Hand:', round_results[3])
+        print('Награда:', round_results[0], '; Раунд окончен:', round_results[1],'; Your Hand:', round_results[4], '; Op`s Hand:', round_results[5], '; Board:', round_results[6])
         print('Результат:', 
-        'Победа' if round_results[0] == 10 else 
+        'Победа' if round_results[0] == 9.5 else 
         'Не вскрывались' if round_results[0] == -0.5 else 
         'Поражение')
         print('==========================================================================')
