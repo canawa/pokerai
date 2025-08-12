@@ -3,14 +3,14 @@ from treys import Card, Deck, Evaluator
 
 class Draw():
     def __init__(self):
-
-        self.deck = Deck() # подтягиваем классы
+        self.reset()
+        
+    def reset(self):
         self.evaluator = Evaluator()
-
+        self.deck = Deck() # подтягиваем классы
         self.board = [] # инициализируем борд и руки, чтобы не было ошибки при вызове борда до его раздачи
         self.player_hand = []
         self.villain_hand = []
-
     def draw_pocket_cards(self): # генерирует стартовые руки (оппа и игрока)
         self.player_hand = self.deck.draw(2) 
         self.villain_hand = self.deck.draw(2)
@@ -35,6 +35,7 @@ class Draw():
         return self.player_str, self.villain_str, self.board_str
     
     def get_score(self): # по этой херне будем разбирать кто выиграл
+        # print(self.board, self.player_hand, self.villain_hand)
         self.player_score = self.evaluator.evaluate(self.board, self.player_hand)
         self.villain_score = self.evaluator.evaluate(self.board, self.villain_hand)
         return self.player_score, self.villain_score

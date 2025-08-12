@@ -26,6 +26,7 @@ else:
 
 commands = input('train or validation: ')
 if commands == 'train':
+    loss_list = []
     for _ in range(100000):
         env.reset() # сбрасываем его состояние
         state = env.get_hand_one_hot() # state это состояние среды, ну ключевая инфа, в моем случае это ключ инфа (one_hot_vector)
@@ -41,10 +42,14 @@ if commands == 'train':
         optimizer.zero_grad() # сброс старых градиентов (чтобы не складывались)
         loss.backward() # автодиф  (найдет производные от каждого веса и запишет их в градиенты)
         optimizer.step() # обновление весов градиентным спуском
-        print('Выход:', output.detach().numpy(), 'Вероятность:', probabilities.detach().numpy(),'Решение:', multinominal_decision, '(PUSH)' if multinominal_decision==1 else '(FOLD)')
-        print('Награда:', round_results[0], '; Раунд окончен:', round_results[1],'; Your Hand:', round_results[4], '; Op`s Hand:', round_results[5])
-        print('Loss:', loss.item())
-        print('============================================================================================')
+        loss_list.append(abs(loss.item()))
+        # print('Выход:', output.detach().numpy(), 'Вероятность:', probabilities.detach().numpy(),'Решение:', multinominal_decision, '(PUSH)' if multinominal_decision==1 else '(FOLD)')
+        # print('Награда:', round_results[0], '; Раунд окончен:', round_results[1],'; Your Hand:', round_results[4], '; Op`s Hand:', round_results[5])
+        # print('Loss:', loss.item())
+        # print('============================================================================================')
+        if _ % 1000 == 0 and _ != 0:
+            print('Step:', _, 'Loss:', sum(loss_list) / len(loss_list))
+            loss_list = []
 
     torch.save(model.state_dict(), 'model.pt') # сохраняем веса
     print('done')
