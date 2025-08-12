@@ -12,20 +12,20 @@ class Draw():
         self.villain_hand = []
 
     def draw_pocket_cards(self): # генерирует стартовые руки (оппа и игрока)
-        self.player_hand = self.deck.draw(2)
+        self.player_hand = self.deck.draw(2) 
         self.villain_hand = self.deck.draw(2)
         return self.player_hand, self.villain_hand
     
     def draw_flop(self): # раздает флоп
-        self.board.extend(self.deck.draw(3))
+        self.board.extend(self.deck.draw(3)) # добавляем флоп к борду (экстенд чтобы не было вложенности)
         return self.board
     
     def draw_turn(self):# раздает терн
-        self.board.extend(self.deck.draw(1))
+        self.board.extend(self.deck.draw(1)) # добавляем терн к борду (экстенд чтобы не было вложенности)
         return self.board
     
     def draw_river(self):# раздает ривер
-        self.board.extend(self.deck.draw(1))
+        self.board.extend(self.deck.draw(1)) # добавляем ривер к борду (экстенд чтобы не было вложенности)
         return self.board
     
     def get_pretty_cards(self): # чисто для вывода
