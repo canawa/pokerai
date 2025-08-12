@@ -3,6 +3,7 @@ from numpy import*
 import torch.nn as nn
 import torch.nn.functional as F
 from env import PokerEnv, env
+from tqdm import tqdm
 
 class PolicyNetwork(nn.Module): # наследуем класс nn.Module
     def __init__(self,in_features,out_features): # конструктор 
@@ -27,7 +28,7 @@ else:
 commands = input('train or validation: ')
 if commands == 'train':
     loss_list = []
-    for _ in range(100000):
+    for _ in tqdm(range(1000000)):
         env.reset() # сбрасываем его состояние
         state = env.get_hand_one_hot() # state это состояние среды, ну ключевая инфа, в моем случае это ключ инфа (one_hot_vector)
         output = model.forward(state.float()) # вернет два значения нейрона
@@ -55,7 +56,7 @@ if commands == 'train':
     torch.save(model.state_dict(), 'model.pt') # сохраняем веса
     print('done')
 elif commands == 'validation':
-    for _ in range(10):
+    for _ in tqdm(range(10)):
         env.reset() # обновляем среду
         state = env.get_hand_one_hot() # запрашиваем нашу руку
         output = model.forward(state.float())

@@ -64,7 +64,7 @@ class PokerEnv:
             self.get_pretty_cards()
             hands = [self.player_hand, self.villain_hand]
             board = self.river
-            cards.evaluator.hand_summary(board, hands)
+            # cards.evaluator.hand_summary(board, hands)
             return self.reward, self.done, self.player_hand_one_hot, self.villain_hand_one_hot, self.player_pretty_cards, self.villain_pretty_cards, self.board_pretty_cards, hands, board
 
 env = PokerEnv()
