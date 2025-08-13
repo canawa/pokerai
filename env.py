@@ -56,10 +56,12 @@ class PokerEnv:
             self.river_one_hot = self.cards.cards_to_one_hot(self.river) # one hot вектор для ривера
 
             self.score = self.cards.get_score()
-            if self.score[0] > self.score[1]:
+            if self.score[0] < self.score[1]: # меньший скор - лучше рука
                 self.reward = 10
-            elif self.score[0] < self.score[1]:
+            elif self.score[0] > self.score[1]: # больший скор - хуже рука
                 self.reward = -10
+            else:
+                self.reward = 0
             self.done = True
             self.get_pretty_cards()
             hands = [self.player_hand, self.villain_hand]

@@ -33,7 +33,7 @@ else:
 commands = input('train or validation: ')
 if commands == 'train':
     loss_list = []
-    for _ in tqdm(range(4000000)):
+    for _ in tqdm(range(100000)):
         env.reset() # сбрасываем его состояние
         state = env.get_hand_one_hot() # state это состояние среды, ну ключевая инфа, в моем случае это ключ инфа (one_hot_vector)
         state = state.to(device) # перемещаем состояние на нужное устройство
@@ -45,7 +45,7 @@ if commands == 'train':
         round_results = env.step(multinominal_decision) # записываем результаты и инфу по раунду игры (env.py)
         reward = round_results[0]
         # POLICY GRADIENT LOSS #
-        loss = torch.log(probabilities[multinominal_decision]) * reward # пока просто запомнить (!!!ПОТОМ ОБЯЗАТЕЛЬНО ПОНЯТЬ ПОЧЕМУ ТАК) выбирает решение мультиноминал пропорционально вероятности
+        loss = -torch.log(probabilities[multinominal_decision]) * reward # пока просто запомнить (!!!ПОТОМ ОБЯЗАТЕЛЬНО ПОНЯТЬ ПОЧЕМУ ТАК) выбирает решение мультиноминал пропорционально вероятности
         # loss = -loss
         optimizer.zero_grad() # сброс старых градиентов (чтобы не складывались)
         loss.backward() # автодиф  (найдет производные от каждого веса и запишет их в градиенты)
@@ -63,7 +63,7 @@ if commands == 'train':
             print('model saved')
     print('training done')
 elif commands == 'validation':
-    for _ in tqdm(range(10)):
+    for _ in range(10):
         env.reset() # обновляем среду
         state = env.get_hand_one_hot() # запрашиваем нашу руку
         state = state.to(device) # перемещаем состояние на нужное устройство
@@ -75,7 +75,7 @@ elif commands == 'validation':
         print('Выход:', output.detach().cpu().numpy(), 'Вероятность:', probabilities.detach().cpu().numpy(),'Решение:', math_correct_decision, '(PUSH)' if math_correct_decision==1 else '(FOLD)')
         print('Награда:', round_results[0], '; Раунд окончен:', round_results[1],'; Your Hand:', round_results[4], '; Op`s Hand:', round_results[5], '; Board:', round_results[6])
         print('Результат:', 
-        'Победа' if round_results[0] == 9.5 else 
+        'Победа' if round_results[0] == 10 else 
         'Не вскрывались' if round_results[0] == -0.5 else 
         'Поражение')
         print('==========================================================================')
