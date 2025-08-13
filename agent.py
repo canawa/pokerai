@@ -33,7 +33,7 @@ else:
 commands = input('train or validation: ')
 if commands == 'train':
     loss_list = []
-    for _ in tqdm(range(1000000)):
+    for _ in tqdm(range(4000000)):
         env.reset() # сбрасываем его состояние
         state = env.get_hand_one_hot() # state это состояние среды, ну ключевая инфа, в моем случае это ключ инфа (one_hot_vector)
         state = state.to(device) # перемещаем состояние на нужное устройство
@@ -56,11 +56,12 @@ if commands == 'train':
         # print('Loss:', loss.item())
         # print('============================================================================================')
         if _ % 1000 == 0 and _ != 0:
-            print('Step:', _, 'Loss:', sum(loss_list) / len(loss_list))
+            print('Step:', _, 'Loss:', sum(loss_list) / len(loss_list)) # среднее значение потерь
             loss_list = []
-
-    torch.save(model.state_dict(), 'model.pt') # сохраняем веса
-    print('done')
+        if _ % 10000 == 0 and _ != 0:
+            torch.save(model.state_dict(), 'model.pt') # сохраняем веса каждые 10000 шагов
+            print('model saved')
+    print('training done')
 elif commands == 'validation':
     for _ in tqdm(range(10)):
         env.reset() # обновляем среду

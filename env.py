@@ -57,7 +57,7 @@ class PokerEnv:
 
             self.score = self.cards.get_score()
             if self.score[0] > self.score[1]:
-                self.reward = 9.5
+                self.reward = 10
             elif self.score[0] < self.score[1]:
                 self.reward = -10
             self.done = True
