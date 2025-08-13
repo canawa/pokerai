@@ -19,7 +19,7 @@ class PolicyNetwork(nn.Module): # наследуем класс nn.Module
 
 model = PolicyNetwork(52,2) # создаем модель, а функции вызываем потом (объект класса PolicyNetwork)
 model = model.to(device) # перемещаем модель на нужное устройство
-print(list(model.parameters())) # это генератор (объект), поэтому просто его вызвать не получится, но через list получится увидеть то что внутри
+
 optimizer = torch.optim.Adam(model.parameters()) # задаем оптимизатор
 
 commands = input('retrain - С нуля подбирать веса, download - Подгрузить веса из model.pt: \n ')
@@ -27,6 +27,7 @@ if commands == 'download':
     print('Используем старые веса. Подгружаем...')
     state_dict = torch.load('model.pt', map_location=device) # сам процесс подгрузки с указанием устройства
     model.load_state_dict(state_dict) # подгружаем веса в виде словаря
+    print(list(model.parameters())) # это генератор (объект), поэтому просто его вызвать не получится, но через list получится увидеть то что внутри
 else:
     print('Начинаем обучение с нуля. Старые данные будут утеряны.')
 
@@ -72,13 +73,13 @@ elif commands == 'validation':
         math_correct_decision = torch.argmax(probabilities).item() # вернет индекс максимального (в прод, но не для обучения)
         multinominal_decision = torch.multinomial(probabilities,1).item() # случайно выбирает действие пропорционально вероятности (для обучения), вернет либо 0 либо 1 (возвращает индексы)
         round_results = env.step(math_correct_decision)
-        print('Выход:', output.detach().cpu().numpy(), 'Вероятность:', probabilities.detach().cpu().numpy(),'Решение:', math_correct_decision, '(PUSH)' if math_correct_decision==1 else '(FOLD)')
-        print('Награда:', round_results[0], '; Раунд окончен:', round_results[1],'; Your Hand:', round_results[4], '; Op`s Hand:', round_results[5], '; Board:', round_results[6])
-        print('Результат:', 
-        'Победа' if round_results[0] == 10 else 
-        'Не вскрывались' if round_results[0] == -0.5 else 
-        'Поражение')
-        print('==========================================================================')
+        # print('Выход:', output.detach().cpu().numpy(), 'Вероятность:', probabilities.detach().cpu().numpy(),'Решение:', math_correct_decision, '(PUSH)' if math_correct_decision==1 else '(FOLD)')
+        # print('Награда:', round_results[0], '; Раунд окончен:', round_results[1],'; Your Hand:', round_results[4], '; Op`s Hand:', round_results[5], '; Board:', round_results[6])
+        # print('Результат:', 
+        # 'Победа' if round_results[0] == 10 else 
+        # 'Не вскрывались' if round_results[0] == -0.5 else 
+        # 'Поражение')
+        # print('==========================================================================')
 
 
 

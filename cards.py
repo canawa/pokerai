@@ -42,11 +42,33 @@ class Draw():
     
     def card_to_index(self, cards): # переводит в число (0 - 51)
         index_list = []
+        # Все 52 карты и их индексы
+        CARD_INDICES = {
+        '2s': 0, '2h': 1, '2d': 2, '2c': 3,
+        '3s': 4, '3h': 5, '3d': 6, '3c': 7,
+        '4s': 8, '4h': 9, '4d': 10, '4c': 11,
+        '5s': 12, '5h': 13, '5d': 14, '5c': 15,
+        '6s': 16, '6h': 17, '6d': 18, '6c': 19,
+        '7s': 20, '7h': 21, '7d': 22, '7c': 23,
+        '8s': 24, '8h': 25, '8d': 26, '8c': 27,
+        '9s': 28, '9h': 29, '9d': 30, '9c': 31,
+        'Ts': 32, 'Th': 33, 'Td': 34, 'Tc': 35,
+        'Js': 36, 'Jh': 37, 'Jd': 38, 'Jc': 39,
+        'Qs': 40, 'Qh': 41, 'Qd': 42, 'Qc': 43,
+        'Ks': 44, 'Kh': 45, 'Kd': 46, 'Kc': 47,
+        'As': 48, 'Ah': 49, 'Ad': 50, 'Ac': 51
+    }
         for card in cards:
-            rank = Card.get_rank_int(card)
-            suit = Card.get_suit_int(card)
-            index = (rank - 2) * 4 + suit
-            index_list.append(index)
+            try:
+                card_str = Card.int_to_str(card)
+                if card_str in CARD_INDICES:
+                    index = CARD_INDICES[card_str]
+                    index_list.append(index)
+                    print(f'Card {card_str} converted to index {index}')
+                else:
+                    print(f'Card {card_str} not found in CARD_INDICES')
+            except Exception as e:
+                print(f'Error {e}')
         return index_list
     
     def cards_to_one_hot(self, cards): # ванхот
