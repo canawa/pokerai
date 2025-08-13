@@ -43,7 +43,7 @@ class Draw():
     def card_to_index(self, cards): # переводит в число (0 - 51)
         index_list = []
         # Все 52 карты и их индексы
-        CARD_INDICES = {
+        CARD_INDICES = { # словарь для перевода карт в индексы
         '2s': 0, '2h': 1, '2d': 2, '2c': 3,
         '3s': 4, '3h': 5, '3d': 6, '3c': 7,
         '4s': 8, '4h': 9, '4d': 10, '4c': 11,
@@ -58,15 +58,15 @@ class Draw():
         'Ks': 44, 'Kh': 45, 'Kd': 46, 'Kc': 47,
         'As': 48, 'Ah': 49, 'Ad': 50, 'Ac': 51
     }
-        for card in cards:
+        for card in cards: # перебираем карты
             try:
                 card_str = Card.int_to_str(card)
-                if card_str in CARD_INDICES:
-                    index = CARD_INDICES[card_str]
-                    index_list.append(index)
-                    print(f'Card {card_str} converted to index {index}')
-                else:
-                    print(f'Card {card_str} not found in CARD_INDICES')
+                if card_str in CARD_INDICES: # если карта есть в словаре
+                    index = CARD_INDICES[card_str] # переводим в индекс (типо индекс равен значению по ключу)
+                    index_list.append(index) # добавляем в список
+                    # print(f'Card {card_str} converted to index {index}')
+                # else:
+                    # print(f'Card {card_str} not found in CARD_INDICES')
             except Exception as e:
                 print(f'Error {e}')
         return index_list

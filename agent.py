@@ -34,7 +34,7 @@ else:
 commands = input('train or validation: ')
 if commands == 'train':
     loss_list = []
-    for _ in tqdm(range(100000)):
+    for _ in tqdm(range(1000000)):
         env.reset() # сбрасываем его состояние
         state = env.get_hand_one_hot() # state это состояние среды, ну ключевая инфа, в моем случае это ключ инфа (one_hot_vector)
         state = state.to(device) # перемещаем состояние на нужное устройство
@@ -73,13 +73,13 @@ elif commands == 'validation':
         math_correct_decision = torch.argmax(probabilities).item() # вернет индекс максимального (в прод, но не для обучения)
         multinominal_decision = torch.multinomial(probabilities,1).item() # случайно выбирает действие пропорционально вероятности (для обучения), вернет либо 0 либо 1 (возвращает индексы)
         round_results = env.step(math_correct_decision)
-        # print('Выход:', output.detach().cpu().numpy(), 'Вероятность:', probabilities.detach().cpu().numpy(),'Решение:', math_correct_decision, '(PUSH)' if math_correct_decision==1 else '(FOLD)')
-        # print('Награда:', round_results[0], '; Раунд окончен:', round_results[1],'; Your Hand:', round_results[4], '; Op`s Hand:', round_results[5], '; Board:', round_results[6])
-        # print('Результат:', 
-        # 'Победа' if round_results[0] == 10 else 
-        # 'Не вскрывались' if round_results[0] == -0.5 else 
-        # 'Поражение')
-        # print('==========================================================================')
+        print('Выход:', output.detach().cpu().numpy(), 'Вероятность:', probabilities.detach().cpu().numpy(),'Решение:', math_correct_decision, '(PUSH)' if math_correct_decision==1 else '(FOLD)')
+        print('Награда:', round_results[0], '; Раунд окончен:', round_results[1],'; Your Hand:', round_results[4], '; Op`s Hand:', round_results[5], '; Board:', round_results[6])
+        print('Результат:', 
+        'Победа' if round_results[0] == 10 else 
+        'Не вскрывались' if round_results[0] == -0.5 else 
+        'Поражение')
+        print('==========================================================================')
 
 
 
